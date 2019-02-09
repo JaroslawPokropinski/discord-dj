@@ -1,4 +1,5 @@
 front/node_modules
+front/e2e
 front/package-lock.json
 server/node_modules
 server/yarn.lock
