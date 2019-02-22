@@ -5,3 +5,4 @@ server/node_modules
 server/yarn.lock
 vue-front/public/
 vue-front/yarn.lock
+server/public/*

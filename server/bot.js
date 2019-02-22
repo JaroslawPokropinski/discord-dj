@@ -80,6 +80,8 @@ ${serverQueue.songs.map(song => `**-** ${song.title}`).join('\n')}
             return msg.channel.send('▶ Resumed the music for you!');
         }
         return msg.channel.send('There is nothing playing.');
+    } else if (command === 'jukebox') {
+        await getMyUrl(msg)
     }
 
     return undefined;
@@ -122,6 +124,40 @@ async function handleVideo(video, msg, voiceChannel, playlist = false) {
     return undefined;
 }
 
+async function handleVideo2(video, guild, channel, voiceChannel) {
+    const serverQueue = queue.get(guild.id);
+    const song = {
+        id: video.id,
+        title: Util.escapeMarkdown(video.title),
+        url: `https://www.youtube.com/watch?v=${video.id}`
+    };
+    if (!serverQueue) {
+        console.debug('Create new queue');
+        const queueConstruct = {
+            textChannel: channel,
+            voiceChannel: voiceChannel,
+            connection: null,
+            songs: [],
+            volume: 1,
+            playing: true
+        };
+        queue.set(guild.id, queueConstruct);
+
+        queueConstruct.songs.push(song);
+
+        try {
+            var connection = await voiceChannel.join();
+            queueConstruct.connection = connection;
+            play(guild, queueConstruct.songs[0]);
+        } catch (error) {
+            console.error(`I could not join the voice channel: ${error}`);
+            queue.delete(guild.id);
+        }
+    } else {
+        serverQueue.songs.push(song);
+    }
+}
+
 function play(guild, song) {
     const serverQueue = queue.get(guild.id);
 
@@ -141,7 +177,9 @@ function play(guild, song) {
         .on('error', error => console.error(error));
     dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
 
-    serverQueue.textChannel.send(`🎶 Start playing: **${song.title}**`);
+    if (serverQueue.textChannel) {
+        serverQueue.textChannel.send(`🎶 Start playing: **${song.title}**`);
+    }
 }
 
 async function playCommand(msg) {
@@ -208,13 +246,35 @@ async function getMyData(msg) {
     msg.channel.send(`Channel${msg.member.voiceChannel}`)
 }
 
-async function playSong(songTitle, voiceChannel) {
-    var videos = await youtube.searchVideos(songTitle, 1);
-    var video = await youtube.getVideoByID(videos[0].id)
-    await handleVideo(video, msg, voiceChannel);
-    
-    return msg.channel.send(`✅ Playlist: **${playlist.title}** has been added to the queue!`);
+async function playSong(songTitle, memberId, guildId) {
+    const guild = client.guilds.get(guildId);
+    const member = guild.members.get(memberId);
+    if (!member.voiceChannel) {
+        console.log('You are not in voice channel');
+        return undefined;
+    }
+    const videos = await youtube.searchVideos(songTitle, 1);
+    const video = await youtube.getVideoByID(videos[0].id);
+    const channel = undefined;
+    await handleVideo2(video, guild, channel, member.voiceChannel);
 }
 
-client.login(TOKEN);
-module.exports.playCommand = playCommand
+async function getMyUrl(msg) {
+    const url = 'http://8a.t4.ds.pwr.wroc.pl:8080/jukebox';
+    const memberB64 = Buffer.from(msg.member.id).toString('base64')
+    const guildB64 = Buffer.from(msg.guild.id).toString('base64')
+    return msg.channel.send(`${url}?member=${memberB64}&guild=${guildB64}`)
+}
+
+function getMemberName(memberId, guildId) {
+    const guild = client.guilds.get(guildId);
+    return guild.members.get(memberId).displayName;
+}
+
+function login() {
+    client.login(TOKEN);
+}
+
+module.exports.login = login
+module.exports.playSong = playSong
+module.exports.getMemberName = getMemberName;
