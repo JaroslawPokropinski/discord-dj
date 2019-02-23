@@ -37,18 +37,18 @@ client.on('message', async msg => { // eslint-disable-line
     if (command === 'play') {
         await playCommand(msg);
     } else if (command === 'skip') {
-        if (!msg.member.voiceChannel) return msg.channel.send('You are not in a voice channel!');
+        // if (!msg.member.voiceChannel) return msg.channel.send('You are not in a voice channel!'); that seems irrelevant
         if (!serverQueue) return msg.channel.send('There is nothing playing that I could skip for you.');
         serverQueue.connection.dispatcher.end('Skip command has been used!');
         return undefined;
     } else if (command === 'stop') {
-        if (!msg.member.voiceChannel) return msg.channel.send('You are not in a voice channel!');
+        // if (!msg.member.voiceChannel) return msg.channel.send('You are not in a voice channel!');
         if (!serverQueue) return msg.channel.send('There is nothing playing that I could stop for you.');
         serverQueue.songs = [];
         serverQueue.connection.dispatcher.end('Stop command has been used!');
         return undefined;
     } else if (command === 'volume') {
-        if (!msg.member.voiceChannel) return msg.channel.send('You are not in a voice channel!');
+        // if (!msg.member.voiceChannel) return msg.channel.send('You are not in a voice channel!');
         if (!serverQueue) return msg.channel.send('There is nothing playing.');
         if (!args[1]) return msg.channel.send(`The current volume is: **${serverQueue.volume}**`);
         serverQueue.volume = args[1];
@@ -248,6 +248,10 @@ async function getMyData(msg) {
 
 async function playSong(songTitle, memberId, guildId) {
     const guild = client.guilds.get(guildId);
+    if (!guild) {
+        console.log('You need to specify correct guild id');
+        return undefined;
+    }
     const member = guild.members.get(memberId);
     if (!member.voiceChannel) {
         console.log('You are not in voice channel');
@@ -260,7 +264,8 @@ async function playSong(songTitle, memberId, guildId) {
 }
 
 async function getMyUrl(msg) {
-    const url = 'http://8a.t4.ds.pwr.wroc.pl:8080/jukebox';
+    
+    const url = 'https://discord-dj.herokuapp.com/jukebox';
     const memberB64 = Buffer.from(msg.member.id).toString('base64')
     const guildB64 = Buffer.from(msg.guild.id).toString('base64')
     return msg.channel.send(`${url}?member=${memberB64}&guild=${guildB64}`)

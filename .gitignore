@@ -1,7 +1,19 @@
-front/node_modules
-front/e2e
-front/package-lock.json
+node_modules
 server/node_modules
-server/yarn.lock
 vue-front/public/
 server/public/*
+vue-front/dist
+vue-front/.env.local
+vue-front/.env.*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories and files
+vue-front/.idea
+vue-front/.vscode
+vue-front/*.suo
+vue-front/*.ntvs*
+vue-front/*.njsproj
+vue-front/*.sln
+vue-front/*.sw*

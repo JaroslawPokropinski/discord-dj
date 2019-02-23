@@ -22,7 +22,7 @@ export default {
     onAddSong: function () {
       if (this.songName.length > 1) {
         axios
-          .post(`${process.env.VUE_APP_SERVER_URL}/addSong?title=${encodeURIComponent(this.songName)}&member=${this.member}&guild=${this.guild}`)
+          .post(`${process.env.VUE_APP_SERVER_URL}addSong?title=${encodeURIComponent(this.songName)}&member=${this.member}&guild=${this.guild}`)
           .then(res => {})
           .catch(err => {})
         this.songName = ''
