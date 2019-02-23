@@ -1,10 +1,10 @@
 <template>
-  <div>
-    <form @submit.prevent="onAddSong">
-      <input type="text" v-model="songName" class="song-input">
-      <input type="submit" value="Add song" class="song-submit">
-    </form>
-  </div>
+<div>
+  <form @submit.prevent="onAddSong">
+    <input type="text" v-model="songName" class="song-input">
+    <input type="submit" value="Add song" class="song-submit">
+  </form>
+</div>
 </template>
 
 <script>

@@ -1,12 +1,17 @@
 <template>
   <div id="app">
+    <navbar class="navbar"/>
     <router-view />
   </div>
 </template>
 
 <script>
+import Navbar from './components/Navbar'
 export default {
-  name: 'app'
+  name: 'app',
+  components: {
+    'navbar': Navbar
+  }
 }
 </script>
 
@@ -29,5 +34,11 @@ html, body {
   align-items: center;
   flex-direction: column;
   background-color: #141d26;
+}
+.navbar {
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  width: 100%;
 }
 </style>
