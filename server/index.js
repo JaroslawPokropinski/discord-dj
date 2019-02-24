@@ -17,8 +17,14 @@ app.post('/addSong', function (req, res) {
 app.post('/playsound', function (req, res) {
     const memberId = Buffer.from(req.query.member, 'base64').toString('ascii');
     const guildId = Buffer.from(req.query.guild, 'base64').toString('ascii');
-    const id = decodeURIComponent(req.query.id);
-    bot.playSong('GLaDOS - You Are A Horrible Person', memberId, guildId);
+    const id = req.query.id;
+    if (id === '0') {
+        bot.playSong('GLaDOS - You Are A Horrible Person', memberId, guildId);
+    }
+    if (id === '1') {
+        bot.playSong('Portal 2: Guilty', memberId, guildId);
+    }
+    
     res.send('');
 });
 

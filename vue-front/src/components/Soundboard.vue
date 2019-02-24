@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from 'axios'
 export default {
   name: 'soundboard',
   data: function () {
@@ -28,6 +28,10 @@ export default {
         {
           id: 0,
           title: 'GLaDOS: horrible person'
+        },
+        {
+          id: 1,
+          title: 'GLaDOS: guilty people'
         }
       ]
     }
@@ -50,11 +54,16 @@ export default {
 
 .sound-box .sound-list {
   list-style-type: none;
+  padding: 8px 0;
   background: #334a66;
   color: white;
 }
 
-.sound-box .sound-list:hover {
+.sound-box .sound-list li {
+  padding: 16px;
+}
+
+.sound-box .sound-list li:hover {
   background-color: #141d26;
 }
 </style>
