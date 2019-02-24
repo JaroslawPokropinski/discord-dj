@@ -20,8 +20,16 @@ export default {
   data: function () {
     return {
       songName: '',
-      member: this.$route.query.member,
-      guild: this.$route.query.guild
+      member: this.$root.$data.state.member,
+      guild: this.$root.$data.state.guild
+    }
+  },
+  beforeCreate: function () {
+    if (this.$route.query.member) {
+      this.$root.$data.state.member = this.$route.query.member
+    }
+    if (this.$route.query.guild) {
+      this.$root.$data.state.guild = this.$route.query.guild
     }
   },
   methods: {

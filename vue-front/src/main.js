@@ -10,7 +10,29 @@ Vue.use(BootstrapVue)
 
 Vue.config.productionTip = false
 
+// const store = {
+//   state: {
+//     memberId: undefined,
+//     guildId: undefined
+//   },
+//   setMemberId (id) {
+//     this.state.memberId = id
+//   },
+//   getMemberId (id) {
+//     return this.state.memberId
+//   },
+//   setGuildId (id) {
+//     this.state.guildId = id
+//   },
+//   getGuildId (id) {
+//     return this.state.guildId
+//   }
+// }
+
 new Vue({
   router,
+  data: {
+    state: {}
+  },
   render: h => h(App)
 }).$mount('#app')

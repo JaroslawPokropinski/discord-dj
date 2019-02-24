@@ -22,6 +22,8 @@ export default {
   name: 'soundboard',
   data: function () {
     return {
+      member: this.$root.$data.state.member,
+      guild: this.$root.$data.state.guild,
       soundList: [
         {
           id: 0,
