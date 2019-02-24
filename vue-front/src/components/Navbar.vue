@@ -1,7 +1,7 @@
 <template>
-<ul class="navbar">
-  <li class="navbar-member selected"><a href="#">Dj</a></li>
-  <li class="navbar-member"><a href="#">Soundboard</a></li>
+<ul class="navbar-ul">
+  <li class="navbar-member selected"><router-link to="/" class="navbar-link">Dj</router-link></li>
+  <li class="navbar-member"><router-link to="/soundboard" class="navbar-link">Soundboard</router-link></li>
 </ul>
 </template>
 
@@ -12,7 +12,7 @@ export default {
 </script>
 
 <style>
-.navbar {
+.navbar-ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -24,7 +24,7 @@ export default {
   float: left;
 }
 
-.navbar-member a {
+.navbar-member .navbar-link {
   display: block;
   color: white;
   text-align: center;
@@ -33,7 +33,7 @@ export default {
 }
 
 /* Change the link color to #111 (black) on hover */
-.navbar-member a:hover {
+.navbar-member .navbar-link:hover {
   background-color: #141d26;
 }
 
@@ -41,7 +41,7 @@ export default {
  background-color: #c51f5d;
 }
 
-.selected a:hover {
+.selected .navbar-link:hover {
  background-color: #6e1133;
 }
 </style>

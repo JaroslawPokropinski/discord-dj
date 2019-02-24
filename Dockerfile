@@ -1,5 +1,6 @@
 FROM node:9-alpine as builder
 RUN yarn global add @vue/cli-service-global
+RUN yarn global add @babel/core@^7.0.0-0
 
 RUN apk update
 RUN apk add --no-cache make gcc g++ python mc htop nano openssl

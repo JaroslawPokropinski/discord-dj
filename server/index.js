@@ -14,6 +14,14 @@ app.post('/addSong', function (req, res) {
     res.send('');
 });
 
+app.post('/playsound', function (req, res) {
+    const memberId = Buffer.from(req.query.member, 'base64').toString('ascii');
+    const guildId = Buffer.from(req.query.guild, 'base64').toString('ascii');
+    const id = decodeURIComponent(req.query.id);
+    bot.playSong('GLaDOS - You Are A Horrible Person', memberId, guildId);
+    res.send('');
+});
+
 app.get('/jukebox_debug', (req, res) => {
     request.get(`/index.html#/?member=${req.query.member}&guild=${req.query.guild}`, (err, response, body) => {
         if (!err) {
@@ -30,3 +38,4 @@ app.listen(port, () => {
     console.log(`Example app listening on port ${port}!`)
     bot.login()
 })
+

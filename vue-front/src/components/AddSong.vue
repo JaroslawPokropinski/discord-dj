@@ -1,9 +1,15 @@
 <template>
-<div>
-  <form @submit.prevent="onAddSong">
-    <input type="text" v-model="songName" class="song-input">
-    <input type="submit" value="Add song" class="song-submit">
-  </form>
+<div class="song-box">
+  <b-container fluid>
+    <b-row align-h="center">
+      <b-col sm="4">
+        <form @submit.prevent="onAddSong">
+          <input type="text" v-model="songName" class="song-input">
+          <input type="submit" value="Add song" class="song-submit">
+        </form>
+      </b-col>
+    </b-row>
+  </b-container>
 </div>
 </template>
 
@@ -24,7 +30,7 @@ export default {
         axios
           .post(`${process.env.VUE_APP_SERVER_URL}addSong?title=${encodeURIComponent(this.songName)}&member=${this.member}&guild=${this.guild}`)
           .then(res => {})
-          .catch(err => {})
+          .catch(err => { console.error(err) })
         this.songName = ''
       } else {
         // push error
@@ -35,11 +41,15 @@ export default {
 </script>
 
 <style>
+.song-box {
+
+}
 .song-input {
   font-family: 'Roboto', sans-serif;
+  display: block;
   width: 100%;
-  margin: 8px 0;
-  box-sizing: border-box;
+  box-sizing:border-box;
+  margin: 8px 0px;
   padding: 1rem 1rem;
   font-size: 2rem;
   border: 0;

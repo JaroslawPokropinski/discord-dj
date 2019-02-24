@@ -1,7 +1,10 @@
 <template>
   <div id="app">
-    <navbar class="navbar"/>
-    <router-view />
+    <navbar class="navibar"/>
+    <div class="content">
+      <router-view />
+    </div>
+
   </div>
 </template>
 
@@ -31,11 +34,14 @@ html, body {
   display: flex;
   height: 100%;
   justify-content: center;
-  align-items: center;
+  /* align-items: center; */
   flex-direction: column;
   background-color: #141d26;
 }
-.navbar {
+.content {
+  padding: 8px;
+}
+.navibar {
   overflow: hidden;
   position: fixed;
   top: 0;
