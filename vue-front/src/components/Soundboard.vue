@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   name: 'soundboard',
   data: function () {
