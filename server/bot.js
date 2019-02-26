@@ -1,8 +1,8 @@
 const { Client, Util } = require('discord.js');
-const { TOKEN, PREFIX, GOOGLE_API_KEY } = require('./config');
+const { TOKEN, PREFIX, GOOGLE_API_KEY, SOUNDCLOUD_CLIENT_ID } = require('./config');
 const YouTube = require('simple-youtube-api');
 const ytdl = require('ytdl-core');
-const soundcloud = require('soundcloud');
+const SC = require('soundcloud');
 
 const client = new Client({ disableEveryone: true });
 
@@ -157,6 +157,35 @@ async function handleVideo2(video, guild, channel, voiceChannel) {
         serverQueue.songs.push(song);
     }
 }
+function handleSong(member, guild, url, target, title = undefined, volume = 1) {
+    const serverQueue = queue.get(guild.id);
+    const song = {
+        title: title,
+        url,
+        volume,
+        target
+    };
+    if (!serverQueue) {
+        const queueConstruct = {
+            connection: null,
+            songs: [],
+            volume: 1,
+            playing: true
+        };
+        queue.set(guild.id, queueConstruct);
+        queueConstruct.songs.push(song);
+        try {
+            var connection = await member.voiceChannel.join();
+            queueConstruct.connection = connection;
+            play(guild, queueConstruct.songs[0]);
+        } catch (error) {
+            console.error(`I could not join the voice channel: ${error}`);
+            queue.delete(guild.id);
+        }
+    } else {
+        serverQueue.songs.push(song);
+    }
+}
 
 function play(guild, song) {
     const serverQueue = queue.get(guild.id);
@@ -167,7 +196,15 @@ function play(guild, song) {
         return;
     }
 
-    const dispatcher = serverQueue.connection.playStream(ytdl(song.url))
+    let stream = undefined;
+    if (song.target === 'yt') {
+        stream = ytdl(song.url);
+    } else if (song.target === 'sc') {
+        const s = await SC.resolve(song.url);
+        stream = await SC.stream(`/tracks/${s.id}`);
+    }
+
+    const dispatcher = serverQueue.connection.playStream(stream)
         .on('end', reason => {
             if (reason === 'Stream is not generating quickly enough.') console.log('Song ended.');
             else console.log(reason);
@@ -178,7 +215,7 @@ function play(guild, song) {
     dispatcher.setVolumeLogarithmic(serverQueue.volume / 5);
 
     if (serverQueue.textChannel) {
-        serverQueue.textChannel.send(`🎶 Start playing: **${song.title}**`);
+        serverQueue.textChannel.send(`🎶 Start playing: **${Util.escapeMarkdown(song.title)}**`);
     }
 }
 
@@ -188,10 +225,6 @@ async function playCommand(msg) {
     const searchString = args.slice(1).join(' ');
     const url = args[1] ? args[1].replace(/<(.+)>/g, '$1') : '';
 
-    const soundcloudRegex = /(https\:\/\/)?(www\.)?soundcloud.com(.*)/;
-    if (args.length == 2 && args[1].match(soundcloudRegex)) {
-
-    }
 
     const voiceChannel = msg.member.voiceChannel;
     if (!voiceChannel) return msg.channel.send('I\'m sorry but you need to be in a voice channel to play music!');
@@ -262,14 +295,26 @@ async function playSong(songTitle, memberId, guildId) {
         console.log('You are not in voice channel');
         return undefined;
     }
-    const videos = await youtube.searchVideos(songTitle, 1);
-    if (videos.length < 1) {
-        // error
-        return;
-    }
-    const video = await youtube.getVideoByID(videos[0].id);
-    const channel = undefined;
-    await handleVideo2(video, guild, channel, member.voiceChannel);
+
+    const soundcloudRegex = /(https\:\/\/)?(www\.)?soundcloud.com(.*)/;
+    const ytRegex = /(https\:\/\/)?(www\.)?youtube.com(.*)/;
+    if (args.length == 2 && args[1].match(soundcloudRegex)) {
+        const song = await SC.resolve(args[1]);
+        console.log(song);
+        // const stream = await SC.stream(`/tracks/${song.id}`);
+        handleSong(member, guild, args[1], 'sc');
+    } else if (args.length == 2 && args[1].match(ytRegex)) {
+        handleSong(member, guild, args[1], 'yt');
+    } else {
+        const videos = await youtube.searchVideos(songTitle, 1);
+        if (videos.length < 1) {
+            // error
+            return;
+        }
+        const video = await youtube.getVideoByID(videos[0].id);
+        handleSong(member, guild, video.url, 'yt', songTitle);
+        // await handleVideo2(video, guild, undefined, member.voiceChannel);
+    }    
 }
 
 async function getMyUrl(msg) {
@@ -286,6 +331,9 @@ function getMemberName(memberId, guildId) {
 }
 
 function login() {
+    SC.initialize({
+        client_id: SOUNDCLOUD_CLIENT_ID
+    });
     client.login(TOKEN);
 }
 
