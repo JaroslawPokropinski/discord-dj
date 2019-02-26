@@ -1,5 +1,6 @@
 <template>
 <div class="song-box">
+  {{ songName }}
   <b-container fluid>
     <b-row align-h="center">
       <b-col sm="4">
@@ -35,12 +36,12 @@ export default {
   methods: {
     onAddSong: function () {
       if (this.songName.length > 1) {
-        this.songName = ''
         const promise = axios.post(`${process.env.VUE_APP_SERVER_URL}addSong?title=${encodeURIComponent(this.songName)}&member=${this.member}&guild=${this.guild}`)
         this.$awn.async(promise, () => {}, () => this.$awn.alert('Failed to add a song!'))
       } else {
         this.$awn.alert('Song title is too short!')
       }
+      this.songName = ''
     }
   }
 }
