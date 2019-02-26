@@ -124,40 +124,40 @@ async function handleVideo(video, msg, voiceChannel, playlist = false) {
     return undefined;
 }
 
-async function handleVideo2(video, guild, channel, voiceChannel) {
-    const serverQueue = queue.get(guild.id);
-    const song = {
-        id: video.id,
-        title: Util.escapeMarkdown(video.title),
-        url: `https://www.youtube.com/watch?v=${video.id}`
-    };
-    if (!serverQueue) {
-        console.debug('Create new queue');
-        const queueConstruct = {
-            textChannel: channel,
-            voiceChannel: voiceChannel,
-            connection: null,
-            songs: [],
-            volume: 1,
-            playing: true
-        };
-        queue.set(guild.id, queueConstruct);
+// async function handleVideo2(video, guild, channel, voiceChannel) {
+//     const serverQueue = queue.get(guild.id);
+//     const song = {
+//         id: video.id,
+//         title: Util.escapeMarkdown(video.title),
+//         url: `https://www.youtube.com/watch?v=${video.id}`
+//     };
+//     if (!serverQueue) {
+//         console.debug('Create new queue');
+//         const queueConstruct = {
+//             textChannel: channel,
+//             voiceChannel: voiceChannel,
+//             connection: null,
+//             songs: [],
+//             volume: 1,
+//             playing: true
+//         };
+//         queue.set(guild.id, queueConstruct);
 
-        queueConstruct.songs.push(song);
+//         queueConstruct.songs.push(song);
 
-        try {
-            var connection = await voiceChannel.join();
-            queueConstruct.connection = connection;
-            play(guild, queueConstruct.songs[0]);
-        } catch (error) {
-            console.error(`I could not join the voice channel: ${error}`);
-            queue.delete(guild.id);
-        }
-    } else {
-        serverQueue.songs.push(song);
-    }
-}
-function handleSong(member, guild, url, target, title = undefined, volume = 1) {
+//         try {
+//             var connection = await voiceChannel.join();
+//             queueConstruct.connection = connection;
+//             play(guild, queueConstruct.songs[0]);
+//         } catch (error) {
+//             console.error(`I could not join the voice channel: ${error}`);
+//             queue.delete(guild.id);
+//         }
+//     } else {
+//         serverQueue.songs.push(song);
+//     }
+// }
+async function handleSong(member, guild, url, target, title = undefined, volume = 1) {
     const serverQueue = queue.get(guild.id);
     const song = {
         title: title,
