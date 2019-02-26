@@ -262,29 +262,20 @@ async function getMyData(msg) {
 async function playSong(songTitle, memberId, guildId) {
     const guild = client.guilds.get(guildId);
     if (!guild) {
-        console.log('You need to specify correct guild id');
         return undefined;
     }
     const member = guild.members.get(memberId);
     if (!member.voiceChannel) {
-        console.log('You are not in voice channel');
         return undefined;
     }
 
     const soundcloudRegex = /(https\:\/\/)?(www\.)?soundcloud.com(.*)/;
     const ytRegex = /(https\:\/\/)?(www\.)?youtube.com(.*)/;
-    console.log('Play song');
     if (songTitle.match(soundcloudRegex)) {
-        // const song = await SC.resolve(args[1]);
-        // console.log(song);
-        // const stream = await SC.stream(`/tracks/${song.id}`);
-        console.log('Play sc song');
         await handleSong(member, guild, songTitle, 'sc');
     } else if (songTitle.match(ytRegex)) {
-        console.log('Play yt url');
         await handleSong(member, guild, songTitle, 'yt');
     } else {
-        console.log('Play yt song');
         const videos = await youtube.searchVideos(songTitle, 1);
         if (videos.length < 1) {
             // error
@@ -292,7 +283,6 @@ async function playSong(songTitle, memberId, guildId) {
         }
         const video = await youtube.getVideoByID(videos[0].id);
         await handleSong(member, guild, video.url, 'yt', songTitle);
-        // await handleVideo2(video, guild, undefined, member.voiceChannel);
     }  
 }
 
@@ -310,9 +300,6 @@ function getMemberName(memberId, guildId) {
 }
 
 function login() {
-    // SC.initialize({
-    //     client_id: SOUNDCLOUD_CLIENT_ID
-    // });
     client.login(TOKEN);
 }
 

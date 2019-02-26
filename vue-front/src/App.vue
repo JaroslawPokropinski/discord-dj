@@ -2,7 +2,9 @@
   <div id="app">
     <navbar class="navibar"/>
     <div class="content">
-      <router-view />
+      <transition name='router-anim' enter-active-class="animated fadeIn faster" leave-active-class="animated fadeOut faster" mode="out-in">
+        <router-view />
+      </transition>
     </div>
 
   </div>
@@ -20,6 +22,7 @@ export default {
 
 <style>
 @import url('https://fonts.googleapis.com/css?family=Roboto');
+@import url("https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css");
 html, body {
   height: 100%;
   margin: 0;
@@ -31,6 +34,7 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
 
+  overflow: hidden;
   display: flex;
   height: 100%;
   justify-content: center;

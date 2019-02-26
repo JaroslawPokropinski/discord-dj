@@ -1,13 +1,45 @@
 <template>
 <ul class="navbar-ul">
-  <li class="navbar-member selected"><router-link to="/" class="navbar-link">Dj</router-link></li>
-  <li class="navbar-member"><router-link to="/soundboard" class="navbar-link">Soundboard</router-link></li>
+  <li v-for="link in links" :key="link.id" v-on:click="selectLink(link.id)" class="navbar-member" v-bind:class="{ selected: link.selected }">
+    <router-link :to="link.to" class="navbar-link">{{ link.name }}</router-link>
+  </li>
+  <!-- <li class="navbar-member selected"><router-link to="/" class="navbar-link">Dj</router-link></li>
+  <li class="navbar-member"><router-link to="/soundboard" class="navbar-link">Soundboard</router-link></li> -->
 </ul>
 </template>
 
 <script>
 export default {
-  name: 'navbar'
+  name: 'navbar',
+  data () {
+    return {
+      links: [
+        {
+          id: 0,
+          name: 'Dj',
+          to: '/',
+          selected: true
+        },
+        {
+          id: 1,
+          name: 'Soundboard',
+          to: '/soundboard',
+          selected: false
+        }
+      ]
+    }
+  },
+  methods: {
+    selectLink: function (id) {
+      for (let link of this.links) {
+        if (link.id === id) {
+          link.selected = true
+        } else {
+          link.selected = false
+        }
+      }
+    }
+  }
 }
 </script>
 
