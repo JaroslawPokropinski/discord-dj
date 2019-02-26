@@ -36,8 +36,7 @@ export default {
     onAddSong: function () {
       if (this.songName.length > 1) {
         this.songName = ''
-        const promise = axios
-          .post(`${process.env.VUE_APP_SERVER_URL}addSong?title=${encodeURIComponent(this.songName)}&member=${this.member}&guild=${this.guild}`)
+        const promise = axios.post(`${process.env.VUE_APP_SERVER_URL}addSong?title=${encodeURIComponent(this.songName)}&member=${this.member}&guild=${this.guild}`)
         this.$awn.async(promise, () => {}, () => this.$awn.alert('Failed to add a song!'))
       } else {
         this.$awn.alert('Song title is too short!')
