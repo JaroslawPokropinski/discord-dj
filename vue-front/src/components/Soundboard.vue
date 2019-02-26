@@ -38,10 +38,9 @@ export default {
   },
   methods: {
     onSound: function (id) {
-      axios
+      const promise = axios
         .post(`${process.env.VUE_APP_SERVER_URL}playSound?id=${id}&member=${this.member}&guild=${this.guild}`)
-        .then(res => {})
-        .catch(err => { console.error(err) })
+      this.$awn.async(promise, () => {}, () => this.$awn.alert('Failed to play a sound'))
     }
   }
 }
