@@ -177,7 +177,7 @@ function handleSong(member, guild, url, target, title = undefined, volume = 1) {
         try {
             var connection = await member.voiceChannel.join();
             queueConstruct.connection = connection;
-            play(guild, queueConstruct.songs[0]);
+            await play(guild, queueConstruct.songs[0]);
         } catch (error) {
             console.error(`I could not join the voice channel: ${error}`);
             queue.delete(guild.id);
@@ -187,7 +187,7 @@ function handleSong(member, guild, url, target, title = undefined, volume = 1) {
     }
 }
 
-function play(guild, song) {
+async function play(guild, song) {
     const serverQueue = queue.get(guild.id);
 
     if (!song) {
