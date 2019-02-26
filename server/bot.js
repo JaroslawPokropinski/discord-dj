@@ -263,6 +263,10 @@ async function playSong(songTitle, memberId, guildId) {
         return undefined;
     }
     const videos = await youtube.searchVideos(songTitle, 1);
+    if (videos.length < 1) {
+        // error
+        return;
+    }
     const video = await youtube.getVideoByID(videos[0].id);
     const channel = undefined;
     await handleVideo2(video, guild, channel, member.voiceChannel);
