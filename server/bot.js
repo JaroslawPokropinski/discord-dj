@@ -1,9 +1,10 @@
 const { Client, Util } = require('discord.js');
-const { TOKEN, PREFIX, GOOGLE_API_KEY, SOUNDCLOUD_CLIENT_ID } = require('./config');
+const { PREFIX, GOOGLE_API_KEY, SOUNDCLOUD_CLIENT_ID } = require('./config');
+const discordConfig = require('./config/discord_config.json');
 const YouTube = require('simple-youtube-api');
 const ytdl = require('ytdl-core');
 const axios = require('axios');
-const m3u8stream = require('m3u8stream')
+const m3u8stream = require('m3u8stream');
 
 const client = new Client({ disableEveryone: true });
 
@@ -287,8 +288,7 @@ async function playSong(songTitle, memberId, guildId) {
 }
 
 async function getMyUrl(msg) {
-    
-    const url = 'https://discord-dj.herokuapp.com/jukebox';
+    const url = 'https://discord-dj.herokuapp.com/';
     const memberB64 = Buffer.from(msg.member.id).toString('base64')
     const guildB64 = Buffer.from(msg.guild.id).toString('base64')
     return msg.channel.send(`${url}?member=${memberB64}&guild=${guildB64}`)
@@ -299,10 +299,25 @@ function getMemberName(memberId, guildId) {
     return guild.members.get(memberId).displayName;
 }
 
+function getMe(guildJson) {
+    const guild = client.guilds.get(guildJson.id);
+    if (guild) {
+        return guild.me;
+    }
+    return undefined;
+}
+
+async function fetchMember(userId, guildId) {
+    const guild = client.guilds.get(guildId);
+    return guild.fetchMember(userId);
+}
+
 function login() {
-    client.login(TOKEN);
+    client.login(discordConfig.token);
 }
 
 module.exports.login = login
 module.exports.playSong = playSong
 module.exports.getMemberName = getMemberName;
+module.exports.getMe = getMe;
+module.exports.fetchMember = fetchMember;

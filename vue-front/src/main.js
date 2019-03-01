@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 import VueAWN from 'vue-awesome-notifications'
+import VueCookie from 'vue-cookie'
 import App from './App.vue'
 import router from './router'
 
@@ -10,6 +11,7 @@ import 'vue-awesome-notifications/dist/styles/style.css'
 
 Vue.use(BootstrapVue)
 Vue.use(VueAWN)
+Vue.use(VueCookie)
 
 Vue.config.productionTip = false
 

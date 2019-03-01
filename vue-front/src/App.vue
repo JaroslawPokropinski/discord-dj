@@ -6,7 +6,6 @@
         <router-view />
       </transition>
     </div>
-
   </div>
 </template>
 
@@ -16,6 +15,18 @@ export default {
   name: 'app',
   components: {
     'navbar': Navbar
+  },
+  beforeCreate () {
+    const guildId = this.$cookie.get('guild_id')
+    const memberId = this.$cookie.get('member_id')
+    if (guildId && memberId) {
+      this.$root.$data.state.member = memberId
+      this.$root.$data.state.guild = guildId
+    } else {
+      if (this.$router.currentRoute.path !== '/login') {
+        this.$router.push('/login')
+      }
+    }
   }
 }
 </script>

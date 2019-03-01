@@ -1,0 +1,11 @@
+{
+    "token": "NDM2OTM2MjMwNjYwMjEwNjg5.Dz2hQA.XJXPiZUjo6CmiyYpL7PjN6wSxhM",
+    "client_secret": "q39T-FAN2LcRxFvWjbO-fi6Y60XF80C-",
+    "client_id": "436936230660210689",
+    "redirect_uri": "http%3A%2F%2Flocalhost%3A8080%2Flogin",
+    "response_type": "code",
+    "scope": "identify%20guilds",
+    "api_url": "https://discordapp.com/api",
+    "oauth_url": "https://discordapp.com/api/oauth2/authorize",
+    "token_url": "https://discordapp.com/api/v6/oauth2/token"
+}
