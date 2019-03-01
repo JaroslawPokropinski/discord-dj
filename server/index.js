@@ -46,15 +46,15 @@ app.get('/jukebox', (req, res) => {
     res.redirect(`/app/index.html#/?member=${req.query.member}&guild=${req.query.guild}`);
 });
 
-app.get('/', (req, res) => {
-  res.redirect(oauthUrl);
-});
+// app.get('/', (req, res) => {
+//   res.redirect(oauthUrl);
+// });
 
 app.get('/login', (req, res) => {
   if (req.query.code) {
     res.redirect(`${config.frontend_url}app/#/login?code=${req.query.code}`);
   } else {
-    res.redirect(`${config.frontend_url}app/#/login`);
+    res.redirect(oauthUrl);
   }
 });
 
