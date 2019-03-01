@@ -3,7 +3,7 @@
     <b-container fluid>
       <b-row align-h="center">
         <b-col>
-          <a v-if="!this.$route.query.code" :href="`${serverUrl}/login`" class="oauth-button">Login with discord</a>
+          <a v-if="!this.$route.query.code" :href="`${serverUrl}login`" class="oauth-button">Login with discord</a>
         </b-col>
       </b-row>
     </b-container>
