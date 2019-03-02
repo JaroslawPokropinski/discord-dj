@@ -17,3 +17,4 @@ vue-front/*.ntvs*
 vue-front/*.njsproj
 vue-front/*.sln
 vue-front/*.sw*
+server/.env
