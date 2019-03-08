@@ -9,7 +9,11 @@ const oauthUrl = `${dc.oauth_url}?client_id=${dc.client_id}&redirect_uri=${proce
 
 
 app.use(cors())
-app.use('/app', express.static('app'))
+app.use('/app', express.static('public'))
+
+app.get('/', function (req, res) {
+  res.redirect('/app')
+});
 
 app.post('/addSong', function (req, res) {
     const memberId = Buffer.from(req.query.member, 'base64').toString('ascii');
