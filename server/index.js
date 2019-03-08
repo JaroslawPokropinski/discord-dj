@@ -21,9 +21,6 @@ app.post('/addSong', function (req, res, next) {
     let title;
     try {
       title = decodeURIComponent(req.query.title);
-      console.log(memberId)
-      console.log(guildId)
-      console.log(title)
     } catch (e) {
       console.error(e);
       next(e);
@@ -158,7 +155,7 @@ app.get('/getUser', (req, res, next) => {
       }
       bot.fetchMember(user.id, guildId)
         .then((member) => {
-          res.send(member.id);
+          res.send(`"${member.id}"`);
         })
         .catch((error) => {
           next(error);
