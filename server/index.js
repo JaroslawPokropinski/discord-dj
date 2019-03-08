@@ -2,14 +2,13 @@ const express = require('express');
 var cors = require('cors');
 const bot = require('./bot');
 const app = express();
-const config = require('./config');
 const request = require('request');
 const dc = require('./config/discord_config.json');
 const port = (process.env.PORT) ? process.env.PORT : 8080;
-const oauthUrl = `${dc.oauth_url}?client_id=${dc.client_id}&redirect_uri=${dc.redirect_uri}&response_type=${dc.response_type}&scope=${dc.scope}`;
+const oauthUrl = `${dc.oauth_url}?client_id=${dc.client_id}&redirect_uri=${process.env.DC_REDIRECT}&response_type=${dc.response_type}&scope=${dc.scope}`;
+
 
 app.use(cors())
-app.use(express.static('public'))
 app.use('/app', express.static('app'))
 
 app.post('/addSong', function (req, res) {
@@ -46,13 +45,10 @@ app.get('/jukebox', (req, res) => {
     res.redirect(`/app/index.html#/?member=${req.query.member}&guild=${req.query.guild}`);
 });
 
-// app.get('/', (req, res) => {
-//   res.redirect(oauthUrl);
-// });
 
 app.get('/login', (req, res) => {
   if (req.query.code) {
-    res.redirect(`${config.frontend_url}app/#/login?code=${req.query.code}`);
+    res.redirect(`${process.env.FRONTEND_URL}app/#/login?code=${req.query.code}`);
   } else {
     res.redirect(oauthUrl);
   }
@@ -66,10 +62,10 @@ app.get('/getUserInfo', (req, res, next) => {
   const code = req.query.code;
   const data = {
     'client_id': dc.client_id,
-    'client_secret': dc.client_secret,
+    'client_secret': process.env.DC_SECRET,
     'grant_type': 'client_credentials',
     'code': code,
-    'redirect_uri': decodeURIComponent(dc.redirect_uri),
+    'redirect_uri': decodeURIComponent(process.env.DC_REDIRECT),
     'scope': decodeURIComponent(dc.scope)
   };
   const headers = {
@@ -103,8 +99,7 @@ app.get('/getGuilds', (req, res, next) => {
         }
         res.send(response);
       } catch(e) {
-        console.log(guilds);
-        res.send('');
+        next(e);
       }
       
     }
@@ -130,10 +125,20 @@ app.get('/getUser', (req, res, next) => {
     if (err) {
       next(err);
     } else {
-      const user = JSON.parse(body);
-      bot.fetchMember(user.id, guildId).then((member) => {
-        res.send(member.id);
-      });
+      let user; 
+      try {
+        user = JSON.parse(body);
+      } catch (e) {
+        console.error(e);
+        next(e);
+      }
+      bot.fetchMember(user.id, guildId)
+        .then((member) => {
+          res.send(member.id);
+        })
+        .catch((error) => {
+          next(error);
+        });
     }
   });
 });

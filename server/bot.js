@@ -1,6 +1,5 @@
 const { Client, Util } = require('discord.js');
-const { PREFIX, GOOGLE_API_KEY, SOUNDCLOUD_CLIENT_ID } = require('./config');
-const discordConfig = require('./config/discord_config.json');
+const { PREFIX } = require('./config');
 const YouTube = require('simple-youtube-api');
 const ytdl = require('ytdl-core');
 const axios = require('axios');
@@ -8,7 +7,7 @@ const m3u8stream = require('m3u8stream');
 
 const client = new Client({ disableEveryone: true });
 
-const youtube = new YouTube(GOOGLE_API_KEY);
+var youtube;
 
 const queue = new Map();
 
@@ -168,10 +167,10 @@ async function play(guild, song) {
     if (song.target === 'yt') {
         stream = ytdl(song.url);
     } else if (song.target === 'sc') {
-        let s = await axios.post(`http://api.soundcloud.com/resolve?url=${song.url}&client_id=${SOUNDCLOUD_CLIENT_ID}`, {});
+        let s = await axios.post(`http://api.soundcloud.com/resolve?url=${song.url}&client_id=${process.env.SOUNDCLOUD_CLIENT_ID}`, {});
         s = s.data;
         try {
-            const t = await axios.get(`https://api-v2.soundcloud.com/media/soundcloud:tracks:${s.id}/legacy-mp3/stream/hls?client_id=${SOUNDCLOUD_CLIENT_ID}`);
+            const t = await axios.get(`https://api-v2.soundcloud.com/media/soundcloud:tracks:${s.id}/legacy-mp3/stream/hls?client_id=${process.env.SOUNDCLOUD_CLIENT_ID}`);
             stream = m3u8stream(t.data.url);
             console.log(stream);
         } catch (error) {
@@ -313,7 +312,8 @@ async function fetchMember(userId, guildId) {
 }
 
 function login() {
-    client.login(discordConfig.token);
+    client.login(process.env.DC_TOKEN);
+    youtube = new YouTube(process.env.GOOGLE_API_KEY);
 }
 
 module.exports.login = login

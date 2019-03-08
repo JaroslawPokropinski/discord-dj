@@ -1,6 +1,3 @@
 { 
-  "PREFIX" : "+",
-  "GOOGLE_API_KEY" : "AIzaSyCbCNSSDTY7C7wHf3waPzJFmjyHBSXVYHI",
-  "SOUNDCLOUD_CLIENT_ID" : "aBCTLmQDtMoZnq70Drm67BWp3bKWcOgl",
-  "frontend_url": "/"
+  "PREFIX" : "?"
 }

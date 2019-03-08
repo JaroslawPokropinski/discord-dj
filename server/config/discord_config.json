@@ -1,8 +1,5 @@
 {
-    "token": "NDM2OTM2MjMwNjYwMjEwNjg5.Dz2hQA.XJXPiZUjo6CmiyYpL7PjN6wSxhM",
-    "client_secret": "q39T-FAN2LcRxFvWjbO-fi6Y60XF80C-",
     "client_id": "436936230660210689",
-    "redirect_uri": "https%3A%2F%2Fdiscord-dj.herokuapp.com%2Flogin",
     "response_type": "code",
     "scope": "identify%20guilds",
     "api_url": "https://discordapp.com/api",
