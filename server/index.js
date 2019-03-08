@@ -15,12 +15,31 @@ app.get('/', function (req, res) {
   res.redirect('/app')
 });
 
-app.post('/addSong', function (req, res) {
-    const memberId = req.query.member;
-    const guildId =req.query.guild;
-    const title = decodeURIComponent(req.query.title);
-    bot.playSong(title, memberId, guildId);
-    res.send('');
+app.post('/addSong', function (req, res, next) {
+    let memberId = req.query.member;
+    let guildId = req.query.guild;
+    let title;
+    try {
+      title = decodeURIComponent(req.query.title);
+      console.log(memberId)
+      console.log(guildId)
+      console.log(title)
+    } catch (e) {
+      console.error(e);
+      next(e);
+    }
+    
+    bot.playSong(title, memberId, guildId)
+      .then((r) => {
+        if (r) {
+          res.send(`Added "${title}" to queue`);
+        } else {
+          next('bot.playSong returned undefined')
+        }
+      })
+      .catch((e) => {
+        next(e)
+      })    
 });
 
 app.post('/playsound', function (req, res) {

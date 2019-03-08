@@ -97,7 +97,7 @@ async function handleVideo(video, msg, voiceChannel, playlist = false) {
     if (!serverQueue) {
         const queueConstruct = {
             textChannel: msg.channel,
-            voiceChannel: voiceChannel,
+            voiceChannel,
             connection: null,
             songs: [],
             volume: 1,
@@ -134,6 +134,7 @@ async function handleSong(member, guild, url, target, title = undefined, volume 
     };
     if (!serverQueue) {
         const queueConstruct = {
+            voiceChannel: member.voiceChannel,
             connection: null,
             songs: [],
             volume: 1,
@@ -155,6 +156,7 @@ async function handleSong(member, guild, url, target, title = undefined, volume 
 }
 
 async function play(guild, song) {
+
     const serverQueue = queue.get(guild.id);
 
     if (!song) {
@@ -162,6 +164,7 @@ async function play(guild, song) {
         queue.delete(guild.id);
         return;
     }
+    console.log(song)
 
     let stream = undefined;
     if (song.target === 'yt') {
@@ -262,10 +265,16 @@ async function getMyData(msg) {
 async function playSong(songTitle, memberId, guildId) {
     const guild = client.guilds.get(guildId);
     if (!guild) {
+        console.error('Guild is not in my guilds!');
         return undefined;
     }
     const member = guild.members.get(memberId);
+    if (!member) {
+        console.error('Member is not in my members!');
+        return undefined;
+    }
     if (!member.voiceChannel) {
+        console.error('Member is not in voice channel!');
         return undefined;
     }
 
@@ -279,11 +288,13 @@ async function playSong(songTitle, memberId, guildId) {
         const videos = await youtube.searchVideos(songTitle, 1);
         if (videos.length < 1) {
             // error
-            return;
+            console.error('Found zero videos');
+            return undefined;
         }
         const video = await youtube.getVideoByID(videos[0].id);
         await handleSong(member, guild, video.url, 'yt', songTitle);
     }  
+    return true;
 }
 
 async function getMyUrl(msg) {
