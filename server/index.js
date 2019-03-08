@@ -86,7 +86,7 @@ app.get('/getUserInfo', (req, res, next) => {
   const data = {
     'client_id': dc.client_id,
     'client_secret': process.env.DC_SECRET,
-    'grant_type': 'client_credentials',
+    'grant_type': 'authorization_code',
     'code': code,
     'redirect_uri': decodeURIComponent(process.env.DC_REDIRECT),
     'scope': decodeURIComponent(dc.scope)
@@ -94,7 +94,8 @@ app.get('/getUserInfo', (req, res, next) => {
   const headers = {
     'Content-Type': 'application/x-www-form-urlencoded'
   };
-  request.post({ url: dc.token_url, form: data, headers: headers}, function (err, httpResponse, body) {
+  const dataEncoded = `client_id=${data.client_id}&client_secret=${data.client_secret}&grant_type=${data.grant_type}&code=${data.code}&redirect_uri=${data.redirect_uri}&scope=${data.scope}`;
+  request.post({ url: dc.token_url, form: dataEncoded, headers: headers}, function (err, httpResponse, body) {
     if (err) {
       next(err);
     } else {
