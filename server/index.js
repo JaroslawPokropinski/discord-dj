@@ -16,16 +16,16 @@ app.get('/', function (req, res) {
 });
 
 app.post('/addSong', function (req, res) {
-    const memberId = Buffer.from(req.query.member, 'base64').toString('ascii');
-    const guildId = Buffer.from(req.query.guild, 'base64').toString('ascii');
+    const memberId = req.query.member;
+    const guildId =req.query.guild;
     const title = decodeURIComponent(req.query.title);
     bot.playSong(title, memberId, guildId);
     res.send('');
 });
 
 app.post('/playsound', function (req, res) {
-    const memberId = Buffer.from(req.query.member, 'base64').toString('ascii');
-    const guildId = Buffer.from(req.query.guild, 'base64').toString('ascii');
+    const memberId = req.query.member;
+    const guildId =req.query.guild;
     const id = req.query.id;
     if (id === '0') {
         bot.playSong('GLaDOS - You Are A Horrible Person', memberId, guildId);
