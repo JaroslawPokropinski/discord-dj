@@ -293,7 +293,7 @@ async function playSong(songTitle, memberId, guildId) {
         }
         const video = await youtube.getVideoByID(videos[0].id);
         await handleSong(member, guild, video.url, 'yt', songTitle);
-    }  
+    }
     return true;
 }
 
@@ -323,7 +323,10 @@ async function fetchMember(userId, guildId) {
 }
 
 function login() {
-    client.login(process.env.DC_TOKEN);
+    client.login(process.env.DC_TOKEN)
+        .catch((error) => {
+            console.error(error);
+        });
     youtube = new YouTube(process.env.GOOGLE_API_KEY);
 }
 
