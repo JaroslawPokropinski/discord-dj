@@ -1,4 +1,4 @@
-FROM node:10 as builder
+FROM node:10-alpine as builder
 RUN yarn global add @vue/cli-service-global
 
 RUN apk update
