@@ -43,18 +43,44 @@ app.post('/addSong', function (req, res, next) {
     })
 });
 
-app.post('/playsound', function (req, res) {
+app.post('/playSound', function (req, res) {
   const memberId = req.query.member;
   const guildId = req.query.guild;
   const id = req.query.id;
   if (id === '0') {
-    bot.playSong('GLaDOS - You Are A Horrible Person', memberId, guildId);
+    bot.playSong('GLaDOS - You Are A Horrible Person', memberId, guildId)
+      .then((r) => {
+        if (r) {
+          res.send(`Added "${'GLaDOS - You Are A Horrible Person'}" to queue`);
+        } else {
+          next('bot.playSong returned undefined')
+        }
+      })
+      .catch((e) => {
+        if (e.message) {
+          return res.status(500).send(e.message);
+        } else {
+          return res.status(500).send(e);
+        }
+      });
   }
   if (id === '1') {
-    bot.playSong('Portal 2: Guilty', memberId, guildId);
+    bot.playSong('Portal 2: Guilty', memberId, guildId)
+      .then((r) => {
+        if (r) {
+          res.send(`Added "${'Portal 2: Guilty'}" to queue`);
+        } else {
+          next('bot.playSong returned undefined')
+        }
+      })
+      .catch((e) => {
+        if (e.message) {
+          return res.status(500).send(e.message);
+        } else {
+          return res.status(500).send(e);
+        }
+      });
   }
-
-  res.send('');
 });
 
 app.get('/jukebox_debug', (req, res) => {
